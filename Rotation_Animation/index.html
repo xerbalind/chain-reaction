@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Reaction Chain</title>
+		<style>
+			body { margin: 0; }
+			canvas { display: block; }
+		</style>
+	</head>
+	<body>
+		<script src="three.js"></script>
+    </body>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75,window.innerWidth / window.innerHeight,0.1,100);
+        const renderer = new THREE.WebGLRenderer();
+        const raycaster = new THREE.Raycaster();
+
+        let sphere_width = 5;
+        let choices = [sphere_width,-sphere_width];
+
+        let shaking_choices = [-sphere_width/25,0,sphere_width/25]
+            let rand_shaking = {
+                '0' : 0,
+                '1' : 0
+            }
+
+        let rotation = new THREE.Vector3();
+
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.BasicShadowMap;
+        document.body.appendChild(renderer.domElement);
+        
+        camera.position.set(0,0,50);
+
+        //Light
+        let ambientLight = new THREE.AmbientLight(0xffffff,0.3);
+        scene.add(ambientLight);
+
+        let pointLight = new THREE.PointLight(0xffffff,0.8);
+        pointLight.position.set(0,0,25);
+        pointLight.castShadow = true;
+        pointLight.shadow.near = 0.1;
+        pointLight.shadow.far = 25;
+        scene.add(pointLight);
+
+        //Rotation
+        let rand_number = Math.floor(calculateRandom(0,2));
+        let rand_corner = calculateRandom(-Math.PI/50,Math.PI/50)
+        switch(rand_number){
+            case 0:
+                rotation.x = rand_corner;
+                break;
+            case 1:
+                rotation.y = rand_corner;
+                break;
+            case 2:
+                rotation.z = rand_corner;
+                break;
+        }
+
+        
+
+        //Create geometry and material
+        let geometry = new THREE.SphereGeometry(sphere_width,15,15);
+        let material = new THREE.MeshPhongMaterial({color:'red'});
+        
+        //Create pivot mesh where the spheres rotate around
+        var pivot = new THREE.Group();
+        scene.add(pivot);
+        pivot.position.set(0,0,0); 
+
+
+        //Create Sphere1 Mesh
+        let sphere = new THREE.Mesh(geometry,material);
+        sphere.position.set(0,0,0);
+        scene.add(sphere);
+        pivot.add(sphere);
+
+
+        //Create Sphere2 Mesh
+        let sphere2 = new THREE.Mesh(geometry,material);
+        let rand_position = {
+            '0': 0,
+            '1': 0
+        }
+        let rand_pos_number = Math.floor(calculateRandom(0,1));
+        rand_position[rand_pos_number.toString()] = randomChoice(choices);
+        sphere2.position.set(rand_position[0],rand_position[1],0);
+        scene.add(sphere2);
+        pivot.add(sphere2);
+
+
+        //Create Sphere3 Mesh
+        let sphere3 = new THREE.Mesh(geometry,material);
+        sphere3.position.x = sphere2.position.x + Math.cos(Math.PI/4) * sphere_width;
+        sphere3.position.y = sphere2.position.y + Math.sin(Math.PI/4) * sphere_width;
+        sphere3.position.z = sphere2.position.z;
+        pivot.add(sphere3);
+        
+
+
+        
+
+        function animate(){
+            requestAnimationFrame(animate);
+
+            rotateSphere();
+            shakeSpheres();
+
+            renderer.render(scene,camera);
+        }
+        animate();
+
+        function rotateSphere(){
+            pivot.rotation.x += rotation.x;
+            pivot.rotation.y += rotation.y;
+            pivot.rotation.z += rotation.z;
+        }
+
+        function shakeSpheres(){
+            // Shaking if 3 spheres
+            if (rand_shaking[0] == 0 && rand_shaking[1] == 0){
+                rand_shaking[0] = randomChoice(shaking_choices);
+                rand_shaking[1] = randomChoice(shaking_choices);
+
+                pivot.position.x += rand_shaking[0]
+                pivot.position.y += rand_shaking[1]
+
+            } else {
+                pivot.position.x -= rand_shaking[0];
+                pivot.position.y -= rand_shaking[1];
+                
+                rand_shaking[0] = 0; 
+                rand_shaking[1] = 0;
+
+            }
+        }
+
+        function randomChoice(arr){
+            return arr[Math.floor(arr.length * Math.random())];
+        }
+
+        function calculateRandom(min,max){
+            if (min < 0){
+                random_number = Math.random() * max;
+                if (Math.random < 0.5){
+                    return -random_number;
+                } else {
+                    return random_number; 
+                }
+            } else {
+                return Math.random() * (max - min + 1) + min;
+            }
+        }
+
+
+    </script>
+</html>

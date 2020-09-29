@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Reaction Chain</title>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+
+		<button id="ready">Ready</button>
+
+		<!-- modal -->
+		<div id="myModal" class="modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2>Chain Reaction</h2>
+				</div>
+				<div class="modal-body">
+					<p>Enter your nickname below to start playing</p>
+					<input type="text" name="name" id="myName" placeholder="Nickname">
+					<p>Enter the lobby you wish to join</p>
+					<input type="text" name="lobby" id="myLobby" placeholder="Lobby">
+					<button id="myButton">Go</button>
+				</div>
+			</div>
+		</div>
+
+		<!-- Lobby -->
+		<div id="mylobby" class="lobby">
+			<h1 class="lobby-title">Lobby:</h1>
+			<p id="mylobby-body" class="lobby-body"></p>
+		</div>
+
+		<!-- Player list -->
+		<div id="myList" class="list">
+			<h1 class="list-title">Players:</h1>
+			<ol class="list-body"></ol>
+		</div>
+
+		<!-- current player -->
+		<div id="myCurrent" class="current">
+			<h2 id="mycurrent-body" class="current-body"></h2>
+		</div>
+
+
+		<script src="jquery-3.4.1.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+		<script src="three.js"></script>
+		<script src="sphere.js"></script>
+		<script src="box.js"></script>
+		<script src="sketch.js"></script>
+	</body>
+</html>
