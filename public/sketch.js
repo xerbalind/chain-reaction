@@ -25,7 +25,7 @@ var current_body = document.getElementById("mycurrent-body");
 var InvisibleCubes = [];
 
 function run(){
-    socket = io.connect('192.168.0.169:3000');
+    socket = io.connect('https://chain1reaction.herokuapp.com/');
 
     socket.on("nojoin",function(){
         alert("game already started --> not joinable");
